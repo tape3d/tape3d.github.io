@@ -1,0 +1,359 @@
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>TAPE3D:TRACKING ALL PIXELS EFFICIENTLY IN 3D</title>
+  <link href="./files/style.css" rel="stylesheet">
+  <!-- <link rel="icon" href="icons/demon_logo_transparent.png" type="image/png"> -->
+  <!-- <link rel="stylesheet" href="./static/css/bulma-carousel.min.css"> -->
+
+  <!-- <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css"> -->
+
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <script type="text/javascript" src="./files/jquery.mlens-1.0.min.js"></script>
+  <script type="text/javascript" src="./files/jquery.js"></script>
+  <style>
+    .divider {
+      border-right: 2px dashed #737373;
+      width: 2px;
+    }
+  </style>
+  <style>
+    .divider_horizontal {
+      border-top: 2px dashed #737373;
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+    }
+  </style>
+
+<style>
+  body {
+    padding: 2em;
+    font-family: sans-serif;
+  }
+
+  iframe {
+    border-radius: 0.5em;
+    width: 27.5em;
+    height: 27.5em;
+    border: none;
+    box-shadow: 0 0 1em 0em rgba(0, 0, 0, 0.15);
+  }
+
+  @media (max-width: 768px) {
+    iframe {
+      width: 100%;
+      height: 30em;
+    }
+  }
+
+  a,
+  a:link {
+    color: #777;
+  }
+
+  /* Styles for the instruction icons and text */
+  .instructions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.2em;
+    text-align: center;
+    padding: 0.6em;
+  }
+
+  .instruction-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    font-size: 1.2em;
+  }
+
+  .instruction-item img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .instructions_small {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1em;
+    text-align: center;
+    padding: 0.5em;
+  }
+
+  .instruction-item_small {
+    display: flex;
+    align-items: center;
+    gap: 0.3em;
+    font-size: 1.0em;
+  }
+
+  .instruction-item_small img {
+    width: 30px;
+    height: 30px;
+  }
+</style>
+
+</head>
+
+<body>
+  <div class="content">
+    <h1 style="line-height: 1.2;">
+      <strong>TAPE3D:TRACKING ALL PIXELS <br> EFFICIENTLY IN 3D</strong>
+    </h1>
+    <br>
+
+    <center>
+      <div class="video-container">
+      <video class='round' autoplay muted loop playsinline style='width: 800px' src='resources/demo_trajs/car-roundabout_traj_concat.mp4'></video>
+      </div>
+    </center>
+
+    <br>
+
+    <center>
+      <div class="video-container">
+      <video class='round' autoplay muted loop playsinline style='width: 800px' src='resources/demo_trajs/butterfly_traj_concat.mp4'></video>
+      </div>
+    </center>
+
+    <br>
+
+    <center>
+      <div class="video-container">
+      <video class='round' autoplay muted loop playsinline style='width: 800px' src='resources/demo_trajs/tortoise_swim.mp4'></video>
+      </div>
+    </center>
+
+    <br>
+
+    <center>
+      <div class="video-container">
+      <video class='round' autoplay muted loop playsinline style='width: 800px' src='resources/demo_trajs/yellow-duck.mp4'></video>
+      </div>
+    </center>
+
+    <br>
+    <center>
+      <h4></strong><strong>TAPE3D</strong> captures <strong>dense, long-range, 3D</strong> trajectories from casual videos in a <strong>feed-forward</strong> manner.</h4>
+    </center>
+
+
+  </div>
+
+  <div class="content">
+    <h2 style="text-align:left;"><strong>Comparison with 3D tracking approach: <a href="https://henry123-boy.github.io/SpaTracker/">SceneTracker</a> and <a href="https://henry123-boy.github.io/SpaTracker/">SpatialTracker</a>, and the 3D version of <a href="https://16lemoing.github.io/dot/">DOT</a> </strong></h2>
+    <br>
+    <tr>
+      <center>
+        <video class='round' autoplay muted loop playsinline style='height:120px' src='resources/dense_videos/concat/car-roundabout_concat_compare.mp4' controls style="border: 5px solid black;"></video>
+      </center>
+    </tr>
+
+    <br>
+
+    <tr>
+      <center>
+        <video class='round' autoplay muted loop playsinline style='height:120px' src='resources/dense_videos/concat/soapbox_concat_compare.mp4' controls style="border: 5px solid black;"></video>
+      </center>
+    </tr>
+    
+    <br>
+
+    <tr>
+      <center>
+        <video class='round' autoplay muted loop playsinline style='height:120px' src='resources/dense_videos/concat/kite-surf_concat_compare.mp4' controls style="border: 5px solid black;"></video>
+      </center>
+    </tr>
+    
+    <br>
+  
+    <tr>
+      <center>
+        <video class='round' autoplay muted loop playsinline style='height:120px' src='resources/dense_videos/concat/horsejump-high_concat_compare.mp4' controls style="border: 5px solid black;"></video>
+      </center>
+    </tr>
+    
+    <br>
+
+    <tr>
+      <center>
+        <video class='round' autoplay muted loop playsinline style='height:120px' src='resources/dense_videos/concat/rollerblade_concat_compare.mp4' controls style="border: 5px solid black;"></video>
+      </center>
+    </tr>
+
+    <br>
+    <h4 class="title is-3">
+      More results of 3D dense tracking can be found <a href="compare_dense.html">here</a>.
+    </h4>
+  </div>
+
+  <div class="content">
+    <h2 style="text-align:left;"><strong>Comparison with 2D tracking approach (lift 3D with depth): <a href="https://co-tracker.github.io/">CoTracker</a> and <a href="https://ku-cvlab.github.io/locotrack/">LocoTrack</a> </strong></h2>
+    <br>
+    <tr>
+      <center>
+        <video class='round' autoplay muted loop playsinline style='height:160px' src='resources/dense_2d_videos/concat/car-roundabout_concat_compare.mp4' controls style="border: 5px solid black;"></video>
+      </center>
+    </tr>
+
+    <br>
+
+    <tr>
+      <center>
+        <video class='round' autoplay muted loop playsinline style='height:160px' src='resources/dense_2d_videos/concat/soapbox_concat_compare.mp4' controls style="border: 5px solid black;"></video>
+      </center>
+    </tr>
+    
+    <br>
+
+    <tr>
+      <center>
+        <video class='round' autoplay muted loop playsinline style='height:160px' src='resources/dense_2d_videos/concat/kite-surf_concat_compare.mp4' controls style="border: 5px solid black;"></video>
+      </center>
+    </tr>
+    
+    <br>
+  
+    <tr>
+      <center>
+        <video class='round' autoplay muted loop playsinline style='height:160px' src='resources/dense_2d_videos/concat/horsejump-high_concat_compare.mp4' controls style="border: 5px solid black;"></video>
+      </center>
+    </tr>
+    
+    <br>
+
+    <tr>
+      <center>
+        <video class='round' autoplay muted loop playsinline style='height:160px' src='resources/dense_2d_videos/concat/rollerblade_concat_compare.mp4' controls style="border: 5px solid black;"></video>
+      </center>
+    </tr>
+
+    
+  </div>
+
+  <div class="content">
+    <h2 style="text-align:left;"><strong>Occlusion problem when using 2D track + Depth </strong></h2>
+    <br>
+
+    <p>Frontal view</p>
+    <tr>
+      <center>
+        <video class='round' autoplay muted loop playsinline style='height:160px' src='resources/dense_2d_videos/concat/scoccerball_concat_compare.mp4' controls style="border: 5px solid black;"></video>
+      </center>
+    </tr>
+
+    <br>
+
+    <p>Side view</p>
+
+    <tr>
+      <center>
+        <video class='round' autoplay muted loop playsinline style='height:160px' src='resources/dense_2d_videos/concat/scoccerball_traj2_concat_compare.mp4' controls style="border: 5px solid black;"></video>
+      </center>
+    </tr>
+    <h4 class="title is-3">
+      (Note that all of the methods use the same video depth input)
+    </h4>
+    <h4 class="title is-3">
+      The baseline (2D Tracker + Depth) struggles significantly with inconsistent video depth estimation, resulting in noticeable jittering effects. Additionally, it fails to accurately track objects during occlusion, as seen from the side view when the ball rolls behind the tree.
+    </h4>
+
+    <br>
+    <h4 class="title is-3">
+      More qualitative results can be found <a href="compare_dense_with_2d.html">here</a>.
+    </h4>
+  </div>
+
+  <div class="content">
+    <h2 style="text-align:left;"><strong>Application: Consistent video editting in 3D space</strong></h2>
+    <br>
+    <center>
+      <div class="video-container">
+      <video class='round' autoplay muted loop playsinline style='height:260px' src='resources/edit_videos/butterfly_edit_concat.mp4'></video>
+      <!-- <div class="hover-text">A hamster wearing virtual reality headsets is a DJ in a disco.</div> -->
+      </div>
+    </center>
+
+    <br>
+
+    <center>
+      <div class="video-container">
+      <video class='round' autoplay muted loop playsinline style='height:260px' src='resources/edit_videos/rollerblade_edit_concat.mp4'></video>
+      <!-- <div class="hover-text">A hamster wearing virtual reality headsets is a DJ in a disco.</div> -->
+      </div>
+    </center>
+
+    <br>
+
+    <center>
+      <div class="video-container">
+      <video class='round' autoplay muted loop playsinline style='height:260px' src='resources/edit_videos/scoccerball_edit_concat.mp4'></video>
+      <!-- <div class="hover-text">A hamster wearing virtual reality headsets is a DJ in a disco.</div> -->
+      </div>
+    </center>
+
+  </div>
+
+  <div class="content">
+    <h2 style="text-align:left;"><strong>Application: Non-rigid structure from motion</strong></h2>
+    <br>
+    <tr>
+      <center>
+        <video class='round' autoplay muted loop playsinline style='height:400px' src='resources/viser_videos/1.mov' controls style="border: 5px solid black;"></video>
+      </center>
+    </tr>
+    <br>
+    <tr>
+      <center>
+        <video class='round' autoplay muted loop playsinline style='height:400px' src='resources/viser_videos/2.mov' controls style="border: 5px solid black;"></video>
+      </center>
+    </tr>
+    <br>
+    <tr>
+      <center>
+        <video class='round' autoplay muted loop playsinline style='height:400px' src='resources/viser_videos/3.mov' controls style="border: 5px solid black;"></video>
+      </center>
+    </tr>
+    
+  </div>
+
+
+<script>
+  // Get the video element
+  var video = document.getElementById("short_video");
+
+  // Set the loop attribute to ensure continuous looping
+  video.loop = true;
+
+  // Set the playback range between frames 0 and 100
+  var startFrame = 0;
+  var endFrame = 1;
+
+  // Listen for the "timeupdate" event to continuously check the playback position
+  video.addEventListener("timeupdate", function() {
+      // Check if the current time is beyond the specified range
+      if (video.currentTime > endFrame) {
+          // Set the playback position back to the start frame
+          video.currentTime = startFrame;
+      }
+  });
+</script>
+
+</body>
+</html>
